@@ -22,11 +22,12 @@ RUN chown -R root:root /root && \
 
 RUN python -m venv /app/.venv && \
     poetry config virtualenvs.in-project true && \
-    /app/.venv/bin/pip install torch==2.5.1 torchaudio==2.5.1 torchvision==0.20.1 \
-    -i https://download.pytorch.org/whl/cpu && \
     /app/.venv/bin/pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple && \
-    /app/.venv/bin/pip install torch-npu==2.5.1.post1 && \
-    /app/.venv/bin/pip install attrs psutil cloudpickle ml-dtypes tornado && \
-    /app/.venv/bin/pip cache purge
+    /app/.venv/bin/pip install torch==2.5.1 torchaudio==2.5.1 torchvision==0.20.1 numpy==1.26.4 && \
+    /app/.venv/bin/pip install torch-npu==2.5.1.post1 scipy==1.14.1 && \
+    /app/.venv/bin/pip install attrs psutil cloudpickle ml-dtypes tornado pyyaml decorator && \
+    /app/.venv/bin/pip cache purge && \
+    sed -i '$d' ~/.bashrc && \
+    echo "export LD_LIBRARY_PATH=/usr/local/Ascend/driver/lib64/driver:/usr/local/Ascend/ascend-toolkit/latest/tools/aml/lib64:/usr/local/Ascend/ascend-toolkit/latest/tools/aml/lib64/plugin:/usr/local/Ascend/ascend-toolkit/latest/lib64:/usr/local/Ascend/ascend-toolkit/latest/lib64/plugin/opskernel:/usr/local/Ascend/ascend-toolkit/latest/lib64/plugin/nnengine:/usr/local/Ascend/ascend-toolkit/latest/opp/built-in/op_impl/ai_core/tbe/op_tiling/lib/linux/aarch64:/usr/local/Ascend/driver/lib64/driver:" >> /root/.bashrc
 
 CMD [ "poetry env use /app/.venv/bin/python && poetry run pip list" ]
