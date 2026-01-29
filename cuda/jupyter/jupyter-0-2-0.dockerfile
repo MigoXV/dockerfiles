@@ -1,6 +1,6 @@
 FROM registry.cn-hangzhou.aliyuncs.com/migo-dl/pytorch:2.8.0-cu128-amd64
 
-RUN /app/.venv/bin/pip install torchcodec==0.7.0 datasets \
+RUN /app/.venv/bin/pip install torchcodec==0.7.0 datasets notebook \
   "tqdm>=4.67.1,<5.0.0" \
   "openai[realtime]>=2.15.0,<3.0.0" \
   "numpy<2.3" \
