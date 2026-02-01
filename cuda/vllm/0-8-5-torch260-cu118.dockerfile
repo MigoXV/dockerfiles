@@ -8,4 +8,3 @@ RUN export HTTP_PROXY=http://127.0.0.1:7890 && \
     wheels/flash_attn-2.7.3+cu11torch2.6cxx11abiFALSE-cp310-cp310-linux_x86_64.whl && \
     /app/.venv/bin/pip cache purge && \
     rm -rf wheels
-
