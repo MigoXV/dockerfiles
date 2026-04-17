@@ -1,0 +1,11 @@
+.git
+.venv
+__pycache__
+*.pyc
+*.pyo
+build
+dist
+tmp
+*.log
+*.run
+*.whl

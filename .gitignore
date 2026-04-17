@@ -1,0 +1,4 @@
+*.sh
+.venv
+*.run
+*.whl
