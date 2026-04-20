@@ -10,14 +10,25 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     gcc \
     g++ \
-    curl \
-    libusb-1.0-0 \
-    libudev1 \
     pkg-config \
+    curl \
+    python3-dev \
+    libcairo2-dev \
+    libgirepository-2.0-dev \
+    gobject-introspection \
+    libglib2.0-dev \
+    libffi-dev \
+    libusb-1.0-0 \
+    libusb-1.0-0-dev \
+    libudev1 \
+    libudev-dev \
+    ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
-RUN pip install --upgrade pip setuptools wheel \
-    && pip install "reachy_mini"
+RUN pip install --upgrade pip setuptools wheel
+RUN pip install pycairo
+RUN pip install PyGObject==3.46.0
+RUN pip install "reachy_mini"
 
 EXPOSE 8000/tcp
 EXPOSE 8443/tcp
