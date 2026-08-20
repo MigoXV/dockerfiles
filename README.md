@@ -16,6 +16,8 @@
   - `0-5-0-cann82rc2*.dockerfile`：基于 CANN 8.2 RC2 的 Ascend 运行环境。
   - `2-6-0-cann82rc2.dockerfile`：PyTorch 2.6.0 + torch-npu 2.6.0 等 Ascend 环境。
   - `fairseq2/`：与 fairseq2/语音相关的 Ascend 环境 Dockerfile。
+- `ax/m4c/`：AX650/M4C ARM64 平台的 AXEngine Python 基础环境。
+  - `0-1-3.dockerfile`：预装 `axengine 0.1.3` 及锁定的最小 Python 依赖。
 
 ## 构建示例
 
@@ -38,6 +40,26 @@ docker build -f ascend-aarch64/2-6-0-cann82rc2.dockerfile -t my-ascend-2.6.0 .
 ```bash
 docker build -f arm/0-5-0-cu124.dockerfile -t my-arm-0.5.0-cu124 .
 ```
+
+- 构建 AX650/M4C AXEngine 环境：
+
+```bash
+docker build \
+  -f ax/m4c/0-1-3.dockerfile \
+  -t registry.cn-hangzhou.aliyuncs.com/migo-dl/axengine:0.1.3-m4c-aarch64 .
+```
+
+该镜像固定为 ARM64，工作目录是 `/app`，Python 3.10 虚拟环境位于 `/app/.venv`。镜像已设置 `PATH`、`VIRTUAL_ENV` 和 Poetry 的 `virtualenvs.in-project=true`，下游 Dockerfile 可以直接复制 `pyproject.toml` 后执行 `poetry install`，依赖会安装到同一个 `/app/.venv`。
+
+镜像只包含 AXEngine Python binding，不包含板卡用户态 `.so`、模型或业务项目。运行时需在 AX650/M4C 宿主使用 `axera-container-runtime`：
+
+```bash
+docker run --rm --runtime=axera --privileged \
+  registry.cn-hangzhou.aliyuncs.com/migo-dl/axengine:0.1.3-m4c-aarch64 \
+  python -c 'import axengine; print(axengine.get_available_providers())'
+```
+
+不要把 volume 直接挂载到 `/app`，否则会遮蔽镜像内的 `/app/.venv`；开发代码可挂载到 `/workspace`，或在派生镜像中使用 `COPY` 合并到 `/app`。
 
 ## 注意事项
 
